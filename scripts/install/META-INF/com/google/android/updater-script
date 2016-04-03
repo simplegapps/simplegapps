@@ -1,0 +1,27 @@
+ui_print("############################");
+ui_print("        Simple GApps        ");
+ui_print("############################");
+ui_print("- Mounting /data, /system...");
+ifelse(is_mounted("/data"), unmount("/data"));
+ifelse(is_mounted("/system"), unmount("/system"));
+run_program("/sbin/mount", "/data");
+run_program("/sbin/mount", "/system");
+ui_print("- Removing
+show_progress(1, 15);
+ui_print("- Extracting files...");
+package_extract_dir("Scripts", "/tmp/simplegapps");
+package_extract_dir("common", "/system");
+package_extract_dir("arch", "/tmp/simplegapps");
+ui_print("- Installing GApps for your DPI...");
+set_perm(0, 0, 0777, "/tmp/simplegapps/installdpigapps.sh");
+run_program("/tmp/simplegapps/installdpigapps.sh");
+show_progress(1, 15);
+ui_print("- Setting metadata");
+set_perm(0, 0, 0777, "/tmp/setpermissions.sh");
+run_program("/tmp/setpermissions.sh");
+ui_print("- Cleaning...");
+delete("/tmp/simplegapps");
+ui_print("- Unmounting /data, /system...");
+run_program("/sbin/umount", "/data");
+run_program("/sbin/umount", "/system");
+ui_print("- All Done!");
